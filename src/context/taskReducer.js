@@ -4,30 +4,29 @@ export const initialState = {
 };
 
 export function taskReducer(state, action) {
-  let updatedTasks;
-
   switch (action.type) {
     case 'ADD_TASK':
-      updatedTasks = [...state.tasks, action.payload];
-      localStorage.setItem('tasks', JSON.stringify(updatedTasks));
-      return { ...state, tasks: updatedTasks };
+      return { ...state, tasks: [...state.tasks, action.payload] };
 
     case 'UPDATE_TASK':
-      updatedTasks = state.tasks.map(task =>
-        task.id === action.payload.id ? action.payload : task
-      );
-      localStorage.setItem('tasks', JSON.stringify(updatedTasks));
-      return { ...state, tasks: updatedTasks };
+      return {
+        ...state,
+        tasks: state.tasks.map(t =>
+          t.id === action.payload.id ? action.payload : t
+        )
+      };
 
     case 'DELETE_TASK':
-      updatedTasks = state.tasks.filter(task => task.id !== action.payload);
-      localStorage.setItem('tasks', JSON.stringify(updatedTasks));
-      return { ...state, tasks: updatedTasks };
+      return {
+        ...state,
+        tasks: state.tasks.filter(t => t.id !== action.payload)
+      };
 
     case 'TOGGLE_THEME':
-      const newTheme = state.theme === 'light' ? 'dark' : 'light';
-      localStorage.setItem('theme', newTheme);
-      return { ...state, theme: newTheme };
+      return {
+        ...state,
+        theme: state.theme === 'light' ? 'dark' : 'light'
+      };
 
     default:
       return state;
